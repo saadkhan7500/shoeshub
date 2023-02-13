@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>Eflyer</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- bootstrap css -->
+      <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+      <!-- style css -->
+      <link rel="stylesheet" type="text/css" href="css/style.css">
+      <!-- Responsive-->
+      <link rel="stylesheet" href="css/responsive.css">
+      <!-- fevicon -->
+      <link rel="icon" href="images/fevicon.png" type="image/gif" />
+      <!-- Scrollbar Custom CSS -->
+      <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+      <!-- Tweaks for older IEs-->
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <!-- fonts -->
+      <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+      <!-- font awesome -->
+      <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <!--  -->
+      <!-- owl stylesheets -->
+      <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Poppins:400,700&display=swap&subset=latin-ext" rel="stylesheet">
+      <link rel="stylesheet" href="css/owl.carousel.min.css">
+      <link rel="stylesoeet" href="css/owl.theme.default.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+	$(document).ready(function(){
+		  {
+		     $.ajax( 
+					 { 
+						 url:"/product/getproducts",
+						 success:function(data) 
+						 { 
+							 
+							 var emp='';
+					            for(var i=0;i<data.length;i++)
+					            	{
+									    emp+='<tr>';
+							    	    emp+='<td>'+data[i].id+'</td>';
+									    emp+='<td>'+data[i].name+'</td>';
+									    emp+='<td>'+data[i].brand+'</td>';
+									    emp+='<td>'+data[i].category+'</td>';
+									    emp+='<td>'+data[i].price+'</td>';
+									    emp+='<td>'+data[i].discount+'</td>';
+									    emp+='<td>'+data[i].size+'</td>';
+									    emp+='<td>'+data[i].quantity+'</td>';
+									    emp+='<form id="uploadForm">';
+									    emp+='<td>'+data[i].imgname+'<input id="file" type="file" name="file" /><button style="color:black;" type="button" class="btn btn-success" onclick="uploadImage('+data[i].id+');">upload</button></td>';
+									    emp+='</form>';
+									    emp+='<td>'+data[i].status+'</td>';
+									    emp+='<td> <button style="color:black;" type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateModal"  onclick="getUserInfo('+data[i].id+');">Edit</button></td>';
+									    emp+='<td> <button style="color:black;" type="button" class="btn btn-danger"   onclick="deleteUser('+data[i].id+');">delete</button></td>';
+
+									 	emp+='</tr>';
+					            	}
+					
+					         $('#tbody').html(emp);
+							
+						  },
+						  type:'GET' // POSt   PUT   DELETE
+						 
+	          });
+		  }
+	});
+	
+	 function getUserInfo(id){
+		  
+		    $.get("/product/getproduct/" + id, function(data) {
+			console.log(data);
+			console.log("insideGetUpdate");
+			$('#id').val(data.id);
+			$('#name').val(data.name);
+			$('#brand').val(data.brand);
+			$('#category').val(data.category);
+			$('#price').val(data.price);
+			$('#discount').val(data.discount);
+			$('#size').val(data.size);
+			$('#quantity').val(data.quantity);
+			$('#status').val(data.status);
+			
+
+		}); 
+	}
+	 
+	 function updateInfo() {
+		 var data = {}
+			data["name"] = $("#name").val();
+			data["brand"] = $("#brand").val();
+			data["category"] = $("#category").val();
+			data["price"] = $("#price").val();
+			data["discount"] = $("#discount").val();
+			data["size"] = $("#size").val();
+			data["quantity"] = $("#quantity").val();
+			data["status"] = $("#status").val();
+			var id=$("#id").val();
+			$.ajax( {
+				    url:"product/updateproduct/"+id, 
+				    contentType: "application/json",
+				    data: JSON.stringify(data), 
+					type:"PUT",
+					dataType: 'json',
+					success:function(resp, status){
+						console.log(resp+" "+ status);	
+						alert("updated");
+					},
+				
+			});
+}	  
+	
+	 
+	 async function uploadFile(id) 
+	 {
+		 console.log(id);
+		  let formData = new FormData(); 
+		  formData.append("file", fileupload.files[0]);
+		  let response = await fetch('/product/uploadimage/'+id, {
+			method: "POST", 
+		    body: formData
+		  }); 
+
+		  if (response.status == 200) {
+		    alert("File successfully uploaded.");
+		  }
+		}
+	 
+	 
+	 function uploadImage(id) {
+		 var formdata = new FormData($('#uploadForm')[0]);
+		 console.log(id);
+		 console.log(formdata);
+			$.ajax( {
+				    type:"POST",
+				    url:"/product/uploadimage/"+id,
+				    dataType: 'text',
+				    contentType: false,
+				    processData: false,
+				    cache: false,
+				    data: formdata,
+				    success: function(response) {
+				        alert("success");
+				    },
+				
+			});
+}	  
+	  </script>
+   </head>
+   <body>
+      <!-- banner bg main start -->
+      <div class="banner_bg_main">
+         <!-- header top section start -->
+         <div class="container">
+            <div class="header_section_top">
+               <div class="row">
+                  <div class="col-sm-12">
+                     <div class="custom_menu">
+                        <ul>
+                           <li><a href="#">Home</a></li>
+                           <li><a th:href="@{/addproduct}">Add Product</a></li>
+                           <li class="active"><a href="#">All Product</a></li>
+                           <li><a th:href="@{/purchasedproduct]}">Purchased Product</a></li>
+                           <li><a th:href="@{/alluser}">All User</a></li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- header top section start -->
+         <!-- logo section start -->
+      
+         <!-- logo section end -->
+         <!-- header section start -->
+  <!--        <div class="header_section">
+            <div class="container">
+               <div class="containt_main">
+                 
+                   <div class="dropdown">
+                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">All Category 
+                     </button>
+                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <a class="dropdown-item" href="#">Something else here</a>
+                     </div>
+                  </div>
+                  <div class="main">
+                     Another variation with a button
+                     <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search this blog">
+                        <div class="input-group-append">
+                           <button class="btn btn-secondary" type="button" style="background-color: #f26522; border-color:#f26522 ">
+                           <i class="fa fa-search"></i>
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+          
+               </div>
+            </div>
+         </div> -->
+    
+    
+         <div class="banner_section layout_padding">
+            <div class="container">
+               <div id="my_slider" class="carousel slide" data-ride="carousel">
+                  <div class="carousel-inner">
+                     <div class="carousel-item active">
+                        <div class="row">
+                           <div class="col-sm-12">
+                              <h1 class="banner_taital">Get Start <br>Your favourite shopping</h1>
+                              <div class="buynow_bt"><a href="#"></a></div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="carousel-item">
+                        <div class="row">
+                           <div class="col-sm-12">
+                              <h1 class="banner_taital">Get Start <br>Your favriot shoping</h1>
+                              <div class="buynow_bt"><a href="#"></a></div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="carousel-item">
+                        <div class="row">
+                           <div class="col-sm-12">
+                              <h1 class="banner_taital">Get Start <br>Your favriot shoping</h1>
+                              <div class="buynow_bt"><a href="#"></a></div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <a class="carousel-control-prev" href="#my_slider" role="button" data-slide="prev">
+                  <i class="fa fa-angle-left"></i>
+                  </a>
+                  <a class="carousel-control-next" href="#my_slider" role="button" data-slide="next">
+                  <i class="fa fa-angle-right"></i>
+                  </a>
+               </div>
+            </div>
+         </div>
+         <!-- banner section end -->
+      </div>
+      <!-- banner bg main end -->
+      
+      
+      <!-- fashion section start -->
+      <div class="fashion_section">
+         <div id="main_slider" class="carousel slide" data-ride="carousel">
+                <div class="container">
+                     <h1 class="fashion_taital">Man & Woman Shoes</h1>
+                     <div id="div" class="fashion_section_2"> 
+                     
+                      <table class="table">
+						<thead>
+							<tr>
+								<th scope="col">ID</th>
+								<th scope="col">Name</th>
+								<th scope="col">Brand</th>
+								<th scope="col">Category</th>
+								<th scope="col">Price</th>
+								<th scope="col">Discount</th>
+								<th scope="col">Size</th>
+								<th scope="col">Quantity</th>
+								<th scope="col">Image Name</th>
+								<th scope="col">Status</th>
+								<th scope="col"></th>
+							</tr>
+						</thead>
+						<tbody id="tbody" class="tbody">
+
+						</tbody>
+					</table>            
+                     </div>
+                  </div>
+         </div>
+      </div>
+  
+      <!-- fashion section end -->
+  
+  
+  <!--Update Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">  Update Page</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <input type="text" id="id" name="name" class="form-control" autocomplete="off" placeholder="ID" readonly/><br>
+          <input type="text" id="name" name="name" class="form-control" autocomplete="off" placeholder="Name" /><br>
+          <input type="text" id="brand" name="name" class="form-control" autocomplete="off" placeholder="Brand" /><br>
+          <input type="text" id="category" name="phone" class="form-control" autocomplete="off" placeholder="Category" /><br>
+          <input type="text" id="price" name="email" class="form-control " autocomplete="off" placeholder="Price" /><br>
+          <input type="text" id="discount" name="address" class="form-control " autocomplete="off" placeholder="Discount" /><br>
+          <input type="text" id="size" name="password" class="form-control" autocomplete="off" placeholder="Size" /><br>
+          <input type="text" id="quantity" name="password" class="form-control" autocomplete="off" placeholder="Quanity" /><br>
+          <input type="text" id="status" name="password" class="form-control" autocomplete="off" placeholder="Status" /><br>
+          <input style="margin-left: 10%; margin-right: 10%; color:black;" type="submit" value="update" class="btn btn-outline-warning"  onclick='updateInfo();'/><br>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal End -->
+  
+      <!-- footer section start -->
+      <div class="footer_section layout_padding">
+         <div class="container">
+            <div class="footer_logo"><a href="index.html"><img src="images/footer-logo.png"></a></div>
+            <div class="location_main">Help Line  Number : <a href="#">+7500495652</a></div>
+         </div>
+      </div>
+      <!-- footer section end -->
+      <!-- copyright section start -->
+      <div class="copyright_section">
+         <div class="container">
+            <p class="copyright_text">© 2020 All Rights Reserved. Design by <a href="#">Mohammad Saad</a></p>
+         </div>
+      </div>
+      <!-- copyright section end -->
+      <!-- Javascript files-->
+      <script src="js/jquery.min.js"></script>
+      <script src="js/popper.min.js"></script>
+      <script src="js/bootstrap.bundle.min.js"></script>
+      <script src="js/jquery-3.0.0.min.js"></script>
+      <script src="js/plugin.js"></script>
+      <!-- sidebar -->
+      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+      <script src="js/custom.js"></script>
+      <script>
+         function openNav() {
+           document.getElementById("mySidenav").style.width = "250px";
+         }
+         
+         function closeNav() {
+           document.getElementById("mySidenav").style.width = "0";
+         }
+      </script>
+   </body>
+</html>
