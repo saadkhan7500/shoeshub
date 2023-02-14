@@ -48,6 +48,16 @@ public class ProductService {
 		
 		return productRepo.save(p);
 	}
+	
+	public List<Product> findProdcutsByCategory(String category)
+	{
+		return productRepo.findProdcutsByCategory(category);
+	}
+	
+	public List<Product> findProductsByBrandOrCatgegory(String search)
+	{
+		return productRepo.findProductsByBrandOrCatgegory(search);
+	}
 	/*
 	 * public List<Product> getAllProducts() { return (List<Product>)
 	 * productRepo.findAll(); }

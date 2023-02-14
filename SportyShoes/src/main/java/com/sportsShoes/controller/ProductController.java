@@ -77,7 +77,18 @@ public class ProductController {
 		System.out.println(p);
 		return new ResponseEntity<Object>("file uploaded",HttpStatus.OK);
 	}
+	
+	@GetMapping("/products/getcategory/{category}")
+	public List<Product> findProdcutsByCategory(@PathVariable("category") String category)
+	{
+		return productService.findProdcutsByCategory(category);
+	}
 	 
+	@GetMapping("/products/getbrandorcatgeory/{search}")
+	public List<Product> findProductsByBrandOrCatgegory(@PathVariable("search")String search)
+	{
+		return productService.findProductsByBrandOrCatgegory(search);
+	}
 	/*
 	 * @GetMapping("/products") public List<Product> getAllProducts() { return
 	 * productService.getAllProducts(); }
