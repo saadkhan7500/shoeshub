@@ -12,11 +12,11 @@ public interface UserRepo extends CrudRepository<User, Integer> {
 
 	public User findById(int id);
 
-	Optional<User> findByEmail(String email);
+	//User findByEmail(String email);
 
-	Optional<User> findByUsernameOrEmail(String username, String email);
+	//User findByUsernameOrEmail(String username, String email);
 
-	Optional<User> findByUsername(String username);
+	User findByUsername(String username);
 
 	Boolean existsByUsername(String username);
 

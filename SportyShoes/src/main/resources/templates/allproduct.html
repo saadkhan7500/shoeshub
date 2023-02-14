@@ -46,6 +46,7 @@
 						 { 
 							 
 							 var emp='';
+							 console.log(data);
 					            for(var i=0;i<data.length;i++)
 					            	{
 									    emp+='<tr>';
@@ -57,9 +58,10 @@
 									    emp+='<td>'+data[i].discount+'</td>';
 									    emp+='<td>'+data[i].size+'</td>';
 									    emp+='<td>'+data[i].quantity+'</td>';
-									    emp+='<form id="uploadForm">';
-									    emp+='<td>'+data[i].imgname+'<input id="file" type="file" name="file" /><button style="color:black;" type="button" class="btn btn-success" onclick="uploadImage('+data[i].id+');">upload</button></td>';
-									    emp+='</form>';
+					
+									    emp+='<td><input id="file" type="file" name="file" />';
+									    emp+='<button style="color:black;" type="button" class="btn btn-danger" onclick="uploadImage('+data[i].id+');">upload</button></td>';
+									    
 									    emp+='<td>'+data[i].status+'</td>';
 									    emp+='<td> <button style="color:black;" type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateModal"  onclick="getUserInfo('+data[i].id+');">Edit</button></td>';
 									    emp+='<td> <button style="color:black;" type="button" class="btn btn-danger"   onclick="deleteUser('+data[i].id+');">delete</button></td>';
@@ -138,22 +140,23 @@
 	 
 	 
 	 function uploadImage(id) {
-		 var formdata = new FormData($('#uploadForm')[0]);
-		 console.log(id);
-		 console.log(formdata);
-			$.ajax( {
-				    type:"POST",
-				    url:"/product/uploadimage/"+id,
-				    dataType: 'text',
-				    contentType: false,
-				    processData: false,
-				    cache: false,
-				    data: formdata,
-				    success: function(response) {
-				        alert("success");
-				    },
-				
-			});
+		 var fd=new FormData();
+		 var files=$('#file')[0].files[0];
+		
+		 fd.append("file",files);
+		
+		 $.ajax({
+			 url:"/product/uploadimage/"+id,
+			 type:"POST",
+			 data:fd,
+			 contentType:false,
+			 processData:false,
+			 success:function(data)
+			 {
+				 console.log("uploaded");
+			 }
+			 
+		 });
 }	  
 	  </script>
    </head>
@@ -254,7 +257,7 @@
          <!-- banner section end -->
       </div>
       <!-- banner bg main end -->
-      
+
       
       <!-- fashion section start -->
       <div class="fashion_section">
