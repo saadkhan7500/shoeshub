@@ -53,4 +53,10 @@ public class IndexController {
 	{
 		return "alluser";
 	}
+	
+	@RequestMapping("/userdashboard")
+	public String userDashboard()
+	{
+		return "userdashboard";
+	}
 }
