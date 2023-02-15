@@ -38,6 +38,9 @@
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script>
 	$(document).ready(function(){
+		 var form=document.getElementById("form");
+		 var newForm=new FormData(form);
+		 console.log(newForm);
 		  {
 		     $.ajax( 
 					 { 
@@ -46,7 +49,6 @@
 						 { 
 							 
 							 var emp='';
-							 console.log(data);
 					            for(var i=0;i<data.length;i++)
 					            	{
 									    emp+='<tr>';
@@ -58,12 +60,9 @@
 									    emp+='<td>'+data[i].discount+'</td>';
 									    emp+='<td>'+data[i].size+'</td>';
 									    emp+='<td>'+data[i].quantity+'</td>';
-					
-									    emp+='<td><input id="file" type="file" name="file" />';
-									    emp+='<button style="color:black;" type="button" class="btn btn-danger" onclick="uploadImage('+data[i].id+');">upload</button></td>';
-									    
+									    emp+='<td><a href="#" data-toggle="modal" data-target="#uploadModal" onclick="getProductId('+data[i].id+')" "><img style="width:30%;height:30%"src="images/'+data[i].imgname+'" /> </a></td>';
 									    emp+='<td>'+data[i].status+'</td>';
-									    emp+='<td> <button style="color:black;" type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateModal"  onclick="getUserInfo('+data[i].id+');">Edit</button></td>';
+									    emp+='<td> <button style="color:black;" type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateModal"  onclick="getProductInfo('+data[i].id+');">Edit</button></td>';
 									    emp+='<td> <button style="color:black;" type="button" class="btn btn-danger"   onclick="deleteUser('+data[i].id+');">delete</button></td>';
 
 									 	emp+='</tr>';
@@ -78,7 +77,13 @@
 		  }
 	});
 	
-	 function getUserInfo(id){
+	function getProductId(id)
+	{
+		console.log(id);
+		$('#pId').val(id);
+	}
+	
+	 function getProductInfo(id){
 		  
 		    $.get("/product/getproduct/" + id, function(data) {
 			console.log(data);
@@ -97,7 +102,7 @@
 		}); 
 	}
 	 
-	 function updateInfo() {
+	 function updateProductInfo() {
 		 var data = {}
 			data["name"] = $("#name").val();
 			data["brand"] = $("#brand").val();
@@ -122,8 +127,8 @@
 			});
 }	  
 	
-	 
-	 async function uploadFile(id) 
+	
+	 /* async function uploadFile(id) 
 	 {
 		 console.log(id);
 		  let formData = new FormData(); 
@@ -142,7 +147,7 @@
 	 function uploadImage(id) {
 		 var fd=new FormData();
 		 var files=$('#file')[0].files[0];
-		
+		  console.log("helllo I am in upload image");
 		 fd.append("file",files);
 		
 		 $.ajax({
@@ -154,10 +159,10 @@
 			 success:function(data)
 			 {
 				 console.log("uploaded");
+				 
 			 }
-			 
 		 });
-}	  
+}	   */
 	  </script>
    </head>
    <body>
@@ -170,9 +175,9 @@
                   <div class="col-sm-12">
                      <div class="custom_menu">
                         <ul>
-                           <li><a href="#">Home</a></li>
+                           <li><a th:href="@{/admindashboard}">Home</a></li>
                            <li><a th:href="@{/addproduct}">Add Product</a></li>
-                           <li class="active"><a href="#">All Product</a></li>
+                           <li><a href="#">All Product</a></li>
                            <li><a th:href="@{/purchasedproduct]}">Purchased Product</a></li>
                            <li><a th:href="@{/alluser}">All User</a></li>
                         </ul>
@@ -294,7 +299,7 @@
       <!-- fashion section end -->
   
   
-  <!--Update Modal -->
+  <!--Update Product Modal -->
 <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -314,12 +319,43 @@
           <input type="text" id="size" name="password" class="form-control" autocomplete="off" placeholder="Size" /><br>
           <input type="text" id="quantity" name="password" class="form-control" autocomplete="off" placeholder="Quanity" /><br>
           <input type="text" id="status" name="password" class="form-control" autocomplete="off" placeholder="Status" /><br>
-          <input style="margin-left: 10%; margin-right: 10%; color:black;" type="submit" value="update" class="btn btn-outline-warning"  onclick='updateInfo();'/><br>
+          <input style="margin-left: 10%; margin-right: 10%; color:black;" type="submit" value="update" class="btn btn-outline-warning"  onclick='updateProductInfo();'/><br>
       </div>
     </div>
   </div>
 </div>
-<!-- Modal End -->
+<!-- Product Modal End -->
+  
+  
+  
+  
+   <!--Upload Image Modal Start -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">  Upload Image</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      
+        <form action="#" method="post" th:action="@{/product/uploadimage}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="file" name="file" accept="image/*" class="form-control-file">
+                        <input type="hidden" name="pId" id="pId" readonly/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Upload image</button>
+        </form>
+      
+      </div>
+    </div>
+  </div>
+</div>
+<!--Upload Image Modal End -->
+  
+  
   
       <!-- footer section start -->
       <div class="footer_section layout_padding">
@@ -342,6 +378,7 @@
       <script src="js/bootstrap.bundle.min.js"></script>
       <script src="js/jquery-3.0.0.min.js"></script>
       <script src="js/plugin.js"></script>
+       <script src="js/jquery.form.min.js"></script>
       <!-- sidebar -->
       <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
       <script src="js/custom.js"></script>

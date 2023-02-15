@@ -62,9 +62,10 @@ public class ProductController {
 	
 	@Value("${file.upload-dir}")
 	String File_DIRECTOY;
-	@PostMapping("/product/uploadimage/{id}")
-	public ResponseEntity<Object> upload(@RequestParam("file") MultipartFile file,@PathVariable("id")int id)throws IOException
+	@PostMapping("/product/uploadimage")
+	public ResponseEntity<Object> upload(@RequestParam("file") MultipartFile file,@RequestParam("pId")int id)throws IOException
 	{
+		System.out.println("Id = "+id);
 		String absolutePath=File_DIRECTOY+file.getOriginalFilename();
 		File myfile=new File(absolutePath);
 		myfile.createNewFile();
