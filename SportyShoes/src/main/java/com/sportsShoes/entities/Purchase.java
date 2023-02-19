@@ -14,18 +14,17 @@ public class Purchase
 	@GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     
-	@OneToOne(targetEntity = Product.class , cascade = CascadeType.ALL)
-    private Product productId;
-    
-	@OneToOne(targetEntity = User.class,cascade = CascadeType.ALL)
-    private User userId;
+	
+	private int productId;
+	
+	private int userId;
 
 	public Purchase() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Purchase(int id, Product productId, User userId) {
+	public Purchase(int id, int productId, int userId) {
 		super();
 		this.id = id;
 		this.productId = productId;
@@ -40,19 +39,19 @@ public class Purchase
 		this.id = id;
 	}
 
-	public Product getProductId() {
+	public int getProductId() {
 		return productId;
 	}
 
-	public void setProductId(Product productId) {
+	public void setProductId(int productId) {
 		this.productId = productId;
 	}
 
-	public User getUserId() {
+	public int getUserId() {
 		return userId;
 	}
 
-	public void setUserId(User userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 
@@ -60,5 +59,6 @@ public class Purchase
 	public String toString() {
 		return "Purchase [id=" + id + ", productId=" + productId + ", userId=" + userId + "]";
 	}
-
+	
+	
 }

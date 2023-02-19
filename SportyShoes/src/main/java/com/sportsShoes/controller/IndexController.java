@@ -91,4 +91,10 @@ public class IndexController {
 		return "OrderPlaced";
 	}
 	
+	@RequestMapping("/purchaseLogin")
+	public String purchaseLogin()
+	{
+		return "purchaseLogin";
+	}
+	
 }

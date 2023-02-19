@@ -39,49 +39,11 @@
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
       
 	<script>
-	function getAllProduct()
-	{
-		console.log("hello");
-		$.ajax( 
-				 { 
-					 url:"/product/getproducts",
-					 success:function(data) 
-					 { 
-						 console.log(data.length);
-					            var temp='<div class="row">';
-					            for(var i=0;i<data.length;i++)
-					            	{
-					            	  if(i%4==0&&i>1) 
-		                            	     temp +='</div>';
-		                            	     
-					            	   if(i%4==0&&i>1)
-					            	   temp +='<div class="row">';
-					            	   
-					            	   temp +='<div class="col-sm-3 col-sm-3">';
-					            	   temp +='<div class="tshirt_img"><a href="#" onclick="purchaseProduct('+data[i].id+')""><img style="width:100px,height:100px;"src="images/'+data[i].imgname+'" /></a>';
-					            	   temp +='<h4 class="shirt_text">'+data[i].name+'</h4>';
-					            	   temp +='<h6 class="shirt_text">'+data[i].brand+'</h6>';
-					            	   var price=data[i].price;
-					            	   var discount=data[i].discount;
-					            	   var discountPrice=(price/100)*discount;
-					            	   var actualPrice=price-discountPrice;
-					            	   temp +='<p class="price_text">Rs.<span id="price" style="color: #262626;">'+actualPrice.toFixed(0)+'     <strike>Rs.'+data[i].price+'</strike> ('+data[i].discount+'% OFF)</span></p></div>';			   
-		                               temp +='</div>';
-		                               
-		                            
-					            	}
-					            temp +='</div>';
-					            
-					    $('#div').html(temp);
-					  },
-					  type:'GET' // POSt   PUT   DELETE
-					 
-         });
-	}
+
 	
 	$(document).ready(function (){
 		
-		 getAllProduct();
+		 
 		 var id=$.cookie("productId");
 		 getProductById(id);
 	});
@@ -94,7 +56,7 @@
 					 url:"/product/getproduct/"+id,
 					 success:function(data) 
 					 { 
-						 console.log(data.length);
+						 
 					            var temp='';
 					            
 					            	   temp +='<div class="row">';
@@ -130,69 +92,30 @@
 
   function savePurchaseInfo(id)
   {
-	  var product={}
-	  $.get("/product/getproduct/" + id, function(data) 
-	   {
-			console.log(data);
-		    
-		    product["id"]=data.id;
-		    product["brand"]=data.brand;
-		    product["category"]=data.category;
-		    product["discount"]=data.discount;
-		    product["imgname"]=data.imgname;
-		    product["name"]=data.name;
-		    product["price"]=data.price;
-		    product["quantity"]=data.quantity;
-		    product["size"]=data.size;
-		    product["status"]=data.status;
-	
-		});
-	  
-	  console.log(product);
-	 var userId =$.cookie("userId1");
-	 var user={}
-	 $.get("/user/getuser/" + userId, function(data) {
-			console.log(data);
-		    
-		    user["id"]=data.id;
-		    user["email"]=data.email;
-		    user["mobile"]=data.mobile;
-		    user["name"]=data.name;
-		    user["password"]=data.password;
-		    user["username"]=data.username;
-		    
-		    var address={}
-		    address["id"]=data.userAddress.id;
-		    address["address"]=data.userAddress.address;
-		    address["city"]=data.userAddress.city;
-		    address["country"]=data.userAddress.country;
-		    address["state"]=data.userAddress.state;
-		    address["zipCode"]=data.userAddress.zipCode;
-		    
-		    user["userAddress"]=address;
-
-		});
-	 console.log(user);
+	  var productId=id;
+	  var userId=$.cookie("userId");
+	  console.log(productId);
+	  console.log(userId);
 	 
 	 var purchase = {}
-	 purchase["productId"] = product;
-	 purchase["userId"] = user;
+	 purchase["productId"] = productId;
+	 purchase["userId"] = userId;
 		
 		console.log(purchase);
 		$.ajax( {url:"/purchase/save", 
-			    contentType: "application/json",
-			    data: JSON.stringify(purchase), 
-				type:"post",
-				dataType: 'json',
-				cache: false,
-		        timeout: 600000,
-		        success: function (data) {
-	 
-                 window.location.replace("/OrderPlaced");
+		    contentType: "application/json",
+		    data: JSON.stringify(purchase), 
+			type:"post",
+			dataType: 'json',
+			cache: false,
+	        timeout: 600000,
+	        success: function (data) {
+             window.location.replace("/OrderPlaced");
+	
+	        },
+			
+	});
 		
-		        },
-				
-		});
   }
 
  </script>

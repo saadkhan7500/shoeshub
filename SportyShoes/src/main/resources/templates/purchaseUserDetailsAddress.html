@@ -63,7 +63,7 @@ border-bottom-right-radius: 15px;
 		data["password"] = $("#password").val();
 		
 		address["address"] = $("#address").val();
-		address["zipcode"] = $("#zipcode").val();
+		address["zipCode"] = $("#zipcode").val();
 		address["city"] = $("#city").val();
 		address["state"] = $("#state").val();
 		address["country"] = $("#country").val();
@@ -79,7 +79,7 @@ border-bottom-right-radius: 15px;
 		        success: function (data) {
 		           
 		           console.log(data.id);
-		           $.cookie("userId1",data.id);
+		           $.cookie("userId",data.id);
 		           window.location.replace("/payment") 
 		        },
 				
@@ -156,7 +156,7 @@ border-bottom-right-radius: 15px;
                     
                 </div>
 
-                <p class="text-center text-muted mt-3 mb-0">Have already an account? <a th:href="@{/userLogin}"
+                <p class="text-center text-muted mt-3 mb-0">Have already an account? <a href="/purchaseLogin"
                     class="fw-bold text-body"><u>Login here</u></a></p>
 
                 </div>
