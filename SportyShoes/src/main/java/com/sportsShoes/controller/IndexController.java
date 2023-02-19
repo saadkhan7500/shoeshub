@@ -59,4 +59,36 @@ public class IndexController {
 	{
 		return "userdashboard";
 	}
+	
+	@RequestMapping("/purchaseProduct")
+	public String purchaseProduct()
+	{
+		return "purchaseProduct";
+	}
+	
+	
+	@RequestMapping("/purchaseAddress")
+	public String purchaseAddress()
+	{
+		return "purchaseAddress";
+	}
+	
+	@RequestMapping("/purchaseUserDetailsAddress")
+	public String purchaseUserDetailsAddress()
+	{
+		return "purchaseUserDetailsAddress";
+	}
+	
+	@RequestMapping("/payment")
+	public String payment()
+	{
+		return "payment";
+	}
+	
+	@RequestMapping("/OrderPlaced")
+	public String OrderPlaced()
+	{
+		return "OrderPlaced";
+	}
+	
 }

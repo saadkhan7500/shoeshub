@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>Eflyer</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- bootstrap css -->
+      <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+      <!-- style css -->
+      <link rel="stylesheet" type="text/css" href="css/style.css">
+      <!-- Responsive-->
+      <link rel="stylesheet" href="css/responsive.css">
+      <!-- fevicon -->
+      <link rel="icon" href="images/fevicon.png" type="image/gif" />
+      <!-- Scrollbar Custom CSS -->
+      <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+      <!-- Tweaks for older IEs-->
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <!-- fonts -->
+      <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+      <!-- font awesome -->
+      <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <!--  -->
+      <!-- owl stylesheets -->
+      <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Poppins:400,700&display=swap&subset=latin-ext" rel="stylesheet">
+      <link rel="stylesheet" href="css/owl.carousel.min.css">
+      <link rel="stylesoeet" href="css/owl.theme.default.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+      
+	<script>
+	function getAllProduct()
+	{
+		console.log("hello");
+		$.ajax( 
+				 { 
+					 url:"/product/getproducts",
+					 success:function(data) 
+					 { 
+						 console.log(data.length);
+					            var temp='<div class="row">';
+					            for(var i=0;i<data.length;i++)
+					            	{
+					            	  if(i%4==0&&i>1) 
+		                            	     temp +='</div>';
+		                            	     
+					            	   if(i%4==0&&i>1)
+					            	   temp +='<div class="row">';
+					            	   
+					            	   temp +='<div class="col-sm-3 col-sm-3">';
+					            	   temp +='<div class="tshirt_img"><a href="#" onclick="purchaseProduct('+data[i].id+')""><img style="width:100px,height:100px;"src="images/'+data[i].imgname+'" /></a>';
+					            	   temp +='<h4 class="shirt_text">'+data[i].name+'</h4>';
+					            	   temp +='<h6 class="shirt_text">'+data[i].brand+'</h6>';
+					            	   var price=data[i].price;
+					            	   var discount=data[i].discount;
+					            	   var discountPrice=(price/100)*discount;
+					            	   var actualPrice=price-discountPrice;
+					            	   temp +='<p class="price_text">Rs.<span id="price" style="color: #262626;">'+actualPrice.toFixed(0)+'     <strike>Rs.'+data[i].price+'</strike> ('+data[i].discount+'% OFF)</span></p></div>';			   
+		                               temp +='</div>';
+		                               
+		                            
+					            	}
+					            temp +='</div>';
+					            
+					    $('#div').html(temp);
+					  },
+					  type:'GET' // POSt   PUT   DELETE
+					 
+         });
+	}
+	
+	$(document).ready(function (){
+		
+		 getAllProduct();
+		 var id=$.cookie("productId");
+		 getProductById(id);
+	});
+	
+  function getProductById(id)
+  {
+	  console.log(id);
+	  $.ajax( 
+				 { 
+					 url:"/product/getproduct/"+id,
+					 success:function(data) 
+					 { 
+						 console.log(data.length);
+					            var temp='';
+					            
+					            	   temp +='<div class="row">';
+					            	   temp +='<div class="col-sm-5 col-sm-5">';
+					            	   temp +='<div class="tshirt_img"><a href="#" onclick="purchaseProduct('+data.id+')""><img style="width:100px,height:100px;"src="images/'+data.imgname+'" /></a>';
+					            	   temp+='</div>';
+					            	   temp+='</div>';
+					            	   temp +='<div style="margin-top:5%;"class="col-sm-5 col-sm-5">';
+					            	   temp +='<h4 class="shirt_text">'+data.name+'</h4>';
+					            	   temp +='<h6 class="shirt_text">'+data.brand+'</h6>';
+					            	   var price=data.price;
+					            	   var discount=data.discount;
+					            	   var discountPrice=(price/100)*discount;
+					            	   var actualPrice=price-discountPrice;
+					            	   temp +='<p class="price_text">Rs.<span id="price" style="color: #262626;">'+actualPrice.toFixed(0)+'     <strike>Rs.'+data.price+'</strike> ('+data.discount+'% OFF)</span></p>';
+					            	   temp +='<span class="price_text" style="color:green;margin-left:30%"> inclusive of all taxes</span>';
+					            	   temp +='<h6 class="shirt_text">Select Size</h6>';
+					            	   temp +='<div style="margin-left:30%">'
+					            	   temp +='<div class="form-check form-check-inline">';
+					            	   temp +='<input class="form-check-input" type="radio" id="size" name="fav_language" value="6" />';
+					            	   temp +='<label class="form-check-label" for="inlineCheckbox1">6</label>';
+					            	   temp +='</div>';
+					            	   temp +='<div class="form-check form-check-inline">';
+					            	   temp +='<input class="form-check-input" type="radio" id="size" name="fav_language" value="7" />';
+					            	   temp +='<label class="form-check-label" for="inlineCheckbox1">7</label>';
+					            	   temp +='</div>';
+					            	   temp +='<div class="form-check form-check-inline">';
+					            	   temp +='<input class="form-check-input" type="radio" id="size" name="fav_language" value="8" />';
+					            	   temp +='<label class="form-check-label" for="inlineCheckbox1">8</label>';
+					            	   temp +='</div>';
+					            	   temp +='<div class="form-check form-check-inline">';
+					            	   temp +='<input class="form-check-input" type="radio" id="size" name="fav_language" value="9"/>';
+					            	   temp +='<label class="form-check-label" for="inlineCheckbox1">9</label>';
+					            	   temp +='</div>';
+					            	   temp +='<div class="form-check form-check-inline">';
+					            	   temp +='<input class="form-check-input" type="radio" id="size" name="fav_language" value="10"/>';
+					            	   temp +='<label class="form-check-label" for="inlineCheckbox1">10</label>';
+					            	   temp +='</div>';
+					            	   temp +='<div class="form-check form-check-inline">';
+					            	   temp +='<input class="form-check-input" type="radio" id="size" name="fav_language" value="11"/>';
+					            	   temp +='<label class="form-check-label" for="inlineCheckbox1">11</label>';
+					            	   temp +='</div>';
+					            	   temp +='</div>';
+					            	   temp +='<div style="margin-left:30%;"class="buy_bt"><a href="#" onclick="getCookie('+data.id+')">Buy Now</a>';
+					            	   temp +='<a style="margin-left:20%;" href="#">Add to cart</a></div>';
+					            	   temp +='</div>';
+		                               temp +='</div>';
+		                               
+		    
+					            
+					    $('#purchase').html(temp);
+					  },
+					  type:'GET' // POSt   PUT   DELETE
+					 
+      });
+  }
+  function purchaseProduct(id)
+  {
+  	console.log(id);
+  	$.cookie("productId", id);
+  	window.location.replace("/purchaseProduct");
+  }
+
+  function getCookie(id)
+  {
+	  $.cookie("pId",id);
+	  var username=$.cookie("username");
+	  var password=$.cookie("password");
+	  if(username==undefined && password==undefined)
+		  {
+		     window.location.replace("/purchaseUserDetailsAddress");
+		  }
+	  
+	 
+		  
+  }
+ </script>
+   </head>
+   <body>
+      <!-- banner bg main start -->
+      <div class="fashion_section">
+         <div id="main_slider" class="carousel slide" data-ride="carousel">
+                <div class="container">
+                     
+                     <div id="purchase" class="fashion_section_2">             
+                     </div>
+            </div>
+         </div>
+      </div>
+         <!-- banner section end -->
+     
+      <!-- banner bg main end -->
+      <!-- fashion section start -->
+    
+     <div class="fashion_section">
+         <div id="main_slider" class="carousel slide" data-ride="carousel">
+                <div class="container">
+                <hr>
+                     <h1 class="fashion_taital">Man & Woman Shoes</h1>
+                     <div id="div" class="fashion_section_2">             
+                     </div>
+            </div>
+         </div>
+      </div>
+      
+
+      <!-- fashion section end -->
+      
+      
+      
+      
+      
+      
+        <!--Update Product Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">  Update Page</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <input type="text" id="id" name="name" class="form-control" autocomplete="off" placeholder="ID" readonly/><br>
+          <input type="text" id="name" name="name" class="form-control" autocomplete="off" placeholder="Name" /><br>
+          <input type="text" id="brand" name="name" class="form-control" autocomplete="off" placeholder="Brand" /><br>
+          <input type="text" id="category" name="phone" class="form-control" autocomplete="off" placeholder="Category" /><br>
+          <input type="text" id="price" name="email" class="form-control " autocomplete="off" placeholder="Price" /><br>
+          <input type="text" id="discount" name="address" class="form-control " autocomplete="off" placeholder="Discount" /><br>
+          <input type="text" id="size" name="password" class="form-control" autocomplete="off" placeholder="Size" /><br>
+          <input type="text" id="quantity" name="password" class="form-control" autocomplete="off" placeholder="Quanity" /><br>
+          <input type="text" id="status" name="password" class="form-control" autocomplete="off" placeholder="Status" /><br>
+          <input style="margin-left: 10%; margin-right: 10%; color:black;" type="submit" value="update" class="btn btn-outline-warning"  onclick='updateProductInfo();'/><br>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Product Modal End -->
+      
+      
+      
+      
+      
+      
+      <!-- footer section start -->
+      <div class="footer_section layout_padding">
+         <div class="container">
+            <div class="footer_logo"><a href="index.html"><img src="images/footer-logo.png"></a></div>
+            <div class="input_bt">
+               <input type="text" class="mail_bt" placeholder="Your Email" name="Your Email">
+               <span class="subscribe_bt" id="basic-addon2"><a href="#">Subscribe</a></span>
+            </div>
+            <div class="footer_menu">
+               <ul>
+                  <li><a href="#">Best Sellers</a></li>
+                  <li><a href="#">Gift Ideas</a></li>
+                  <li><a href="#">New Releases</a></li>
+                  <li><a href="#">Today's Deals</a></li>
+                  <li><a href="#">Customer Service</a></li>
+               </ul>
+            </div>
+            <div class="location_main">Help Line  Number : <a href="#">+1 1800 1200 1200</a></div>
+         </div>
+      </div>
+      <!-- footer section end -->
+      <!-- copyright section start -->
+      <div class="copyright_section">
+         <div class="container">
+            <p class="copyright_text">© 2020 All Rights Reserved. Design by <a href="https://html.design">Free html  Templates</a></p>
+         </div>
+      </div>
+      <!-- copyright section end -->
+      <!-- Javascript files-->
+  
+      <!-- sidebar -->
+      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+      <script src="js/custom.js"></script>
+      <script>
+         function openNav() {
+           document.getElementById("mySidenav").style.width = "250px";
+         }
+         
+         function closeNav() {
+           document.getElementById("mySidenav").style.width = "0";
+         }
+      </script>
+   </body>
+</html>

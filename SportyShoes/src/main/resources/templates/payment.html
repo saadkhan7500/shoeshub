@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <!-- basic -->
+      <meta charset="utf-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!-- mobile metas -->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+      <!-- site metas -->
+      <title>Eflyer</title>
+      <meta name="keywords" content="">
+      <meta name="description" content="">
+      <meta name="author" content="">
+      <!-- bootstrap css -->
+      <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+      <!-- style css -->
+      <link rel="stylesheet" type="text/css" href="css/style.css">
+      <!-- Responsive-->
+      <link rel="stylesheet" href="css/responsive.css">
+      <!-- fevicon -->
+      <link rel="icon" href="images/fevicon.png" type="image/gif" />
+      <!-- Scrollbar Custom CSS -->
+      <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
+      <!-- Tweaks for older IEs-->
+      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+      <!-- fonts -->
+      <link href="https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap" rel="stylesheet">
+      <!-- font awesome -->
+      <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+      <!--  -->
+      <!-- owl stylesheets -->
+      <link href="https://fonts.googleapis.com/css?family=Great+Vibes|Poppins:400,700&display=swap&subset=latin-ext" rel="stylesheet">
+      <link rel="stylesheet" href="css/owl.carousel.min.css">
+      <link rel="stylesoeet" href="css/owl.theme.default.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+      
+	<script>
+	function getAllProduct()
+	{
+		console.log("hello");
+		$.ajax( 
+				 { 
+					 url:"/product/getproducts",
+					 success:function(data) 
+					 { 
+						 console.log(data.length);
+					            var temp='<div class="row">';
+					            for(var i=0;i<data.length;i++)
+					            	{
+					            	  if(i%4==0&&i>1) 
+		                            	     temp +='</div>';
+		                            	     
+					            	   if(i%4==0&&i>1)
+					            	   temp +='<div class="row">';
+					            	   
+					            	   temp +='<div class="col-sm-3 col-sm-3">';
+					            	   temp +='<div class="tshirt_img"><a href="#" onclick="purchaseProduct('+data[i].id+')""><img style="width:100px,height:100px;"src="images/'+data[i].imgname+'" /></a>';
+					            	   temp +='<h4 class="shirt_text">'+data[i].name+'</h4>';
+					            	   temp +='<h6 class="shirt_text">'+data[i].brand+'</h6>';
+					            	   var price=data[i].price;
+					            	   var discount=data[i].discount;
+					            	   var discountPrice=(price/100)*discount;
+					            	   var actualPrice=price-discountPrice;
+					            	   temp +='<p class="price_text">Rs.<span id="price" style="color: #262626;">'+actualPrice.toFixed(0)+'     <strike>Rs.'+data[i].price+'</strike> ('+data[i].discount+'% OFF)</span></p></div>';			   
+		                               temp +='</div>';
+		                               
+		                            
+					            	}
+					            temp +='</div>';
+					            
+					    $('#div').html(temp);
+					  },
+					  type:'GET' // POSt   PUT   DELETE
+					 
+         });
+	}
+	
+	$(document).ready(function (){
+		
+		 getAllProduct();
+		 var id=$.cookie("productId");
+		 getProductById(id);
+	});
+	
+  function getProductById(id)
+  {
+	  console.log(id);
+	  $.ajax( 
+				 { 
+					 url:"/product/getproduct/"+id,
+					 success:function(data) 
+					 { 
+						 console.log(data.length);
+					            var temp='';
+					            
+					            	   temp +='<div class="row">';
+					            	   temp +='<div class="col-sm-5 col-sm-5">';
+					            	   temp +='<div class="tshirt_img"><img style="width:100px,height:100px;"src="images/'+data.imgname+'" />';
+					            	   temp+='</div>';
+					            	   temp+='</div>';
+					            	   temp +='<div style="margin-top:5%;"class="col-sm-5 col-sm-5">';
+					            	   temp +='<h4 class="shirt_text">'+data.name+'</h4>';
+					            	   temp +='<h6 class="shirt_text">'+data.brand+'</h6>';
+					            	   var price=data.price;
+					            	   var discount=data.discount;
+					            	   var discountPrice=(price/100)*discount;
+					            	   var actualPrice=price-discountPrice;
+					            	   temp +='<p class="price_text">Rs.<span id="price" style="color: #262626;">'+actualPrice.toFixed(0)+'     <strike>Rs.'+data.price+'</strike> ('+data.discount+'% OFF)</span></p>';
+					            	   temp +='<span class="price_text" style="color:green;margin-left:30%"> inclusive of all taxes</span>';
+					            	   temp +='<button style="color:black; margin-left:30%; margin-top:5%;" type="button" class="btn btn-warning"  onclick="savePurchaseInfo('+data.id+');">Place Your Order</button>';
+					            	   temp +='</div>';
+					            	   temp +='</div>';
+		                               temp +='</div>';
+		                               
+		    
+					            
+					    $('#purchase').html(temp);
+					  },
+					  type:'GET' // POSt   PUT   DELETE
+					 
+      });
+  }
+
+  
+  
+
+  function savePurchaseInfo(id)
+  {
+	  var product={}
+	  $.get("/product/getproduct/" + id, function(data) 
+	   {
+			console.log(data);
+		    
+		    product["id"]=data.id;
+		    product["brand"]=data.brand;
+		    product["category"]=data.category;
+		    product["discount"]=data.discount;
+		    product["imgname"]=data.imgname;
+		    product["name"]=data.name;
+		    product["price"]=data.price;
+		    product["quantity"]=data.quantity;
+		    product["size"]=data.size;
+		    product["status"]=data.status;
+	
+		});
+	  
+	  console.log(product);
+	 var userId =$.cookie("userId1");
+	 var user={}
+	 $.get("/user/getuser/" + userId, function(data) {
+			console.log(data);
+		    
+		    user["id"]=data.id;
+		    user["email"]=data.email;
+		    user["mobile"]=data.mobile;
+		    user["name"]=data.name;
+		    user["password"]=data.password;
+		    user["username"]=data.username;
+		    
+		    var address={}
+		    address["id"]=data.userAddress.id;
+		    address["address"]=data.userAddress.address;
+		    address["city"]=data.userAddress.city;
+		    address["country"]=data.userAddress.country;
+		    address["state"]=data.userAddress.state;
+		    address["zipCode"]=data.userAddress.zipCode;
+		    
+		    user["userAddress"]=address;
+
+		});
+	 console.log(user);
+	 
+	 var purchase = {}
+	 purchase["productId"] = product;
+	 purchase["userId"] = user;
+		
+		console.log(purchase);
+		$.ajax( {url:"/purchase/save", 
+			    contentType: "application/json",
+			    data: JSON.stringify(purchase), 
+				type:"post",
+				dataType: 'json',
+				cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+	 
+                 window.location.replace("/OrderPlaced");
+		
+		        },
+				
+		});
+  }
+
+ </script>
+   </head>
+   <body>
+      <!-- banner bg main start -->
+      
+                <div class="container">
+                     
+                     <div id="purchase" class="fashion_section_2">             
+                     </div>
+            </div>
+
+         <!-- banner section end -->
+     
+      <!-- banner bg main end -->
+      <!-- fashion section start -->
+
+      <!-- fashion section end -->
+      
+      
+      
+      
+      
+
+      
+      
+      
+      
+      
+      
+      <!-- footer section start -->
+      <div class="footer_section layout_padding">
+         <div class="container">
+            <div class="footer_logo"><a href="index.html"><img src="images/footer-logo.png"></a></div>
+            <div class="input_bt">
+               <input type="text" class="mail_bt" placeholder="Your Email" name="Your Email">
+               <span class="subscribe_bt" id="basic-addon2"><a href="#">Subscribe</a></span>
+            </div>
+            <div class="footer_menu">
+               <ul>
+                  <li><a href="#">Best Sellers</a></li>
+                  <li><a href="#">Gift Ideas</a></li>
+                  <li><a href="#">New Releases</a></li>
+                  <li><a href="#">Today's Deals</a></li>
+                  <li><a href="#">Customer Service</a></li>
+               </ul>
+            </div>
+            <div class="location_main">Help Line  Number : <a href="#">+1 1800 1200 1200</a></div>
+         </div>
+      </div>
+      <!-- footer section end -->
+      <!-- copyright section start -->
+      <div class="copyright_section">
+         <div class="container">
+            <p class="copyright_text">© 2020 All Rights Reserved. Design by <a href="https://html.design">Free html  Templates</a></p>
+         </div>
+      </div>
+      <!-- copyright section end -->
+      <!-- Javascript files-->
+  
+      <!-- sidebar -->
+      <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+      <script src="js/custom.js"></script>
+      <script>
+         function openNav() {
+           document.getElementById("mySidenav").style.width = "250px";
+         }
+         
+         function closeNav() {
+           document.getElementById("mySidenav").style.width = "0";
+         }
+      </script>
+   </body>
+</html>

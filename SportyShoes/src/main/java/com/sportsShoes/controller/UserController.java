@@ -50,7 +50,7 @@ public class UserController {
 		}
 		
 		userService.createUser(user);
-		return new ResponseEntity<>("User registered successfully", HttpStatus.OK);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 	@PostMapping("user/authentication")

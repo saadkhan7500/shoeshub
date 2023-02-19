@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<style>
+@media (min-width: 1025px) {
+.h-custom {
+height: 100vh !important;
+}
+}
+.card-registration .select-input.form-control[readonly]:not([disabled]) {
+font-size: 1rem;
+line-height: 2.15;
+padding-left: .75em;
+padding-right: .75em;
+}
+.card-registration .select-arrow {
+top: 13px;
+}
+
+.gradient-custom-2 {
+/* fallback for old browsers */
+background: #a1c4fd;
+
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to right, rgba(161, 196, 253, 1), rgba(194, 233, 251, 1));
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right, rgba(161, 196, 253, 1), rgba(194, 233, 251, 1))
+}
+
+.bg-indigo {
+background-color: #4835d4;
+}
+@media (min-width: 992px) {
+.card-registration-2 .bg-indigo {
+border-top-right-radius: 15px;
+border-bottom-right-radius: 15px;
+}
+}
+@media (max-width: 991px) {
+.card-registration-2 .bg-indigo {
+border-bottom-left-radius: 15px;
+border-bottom-right-radius: 15px;
+}
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+  <script>
+  function save() {
+	    var address ={}
+		var data = {}
+		data["name"] = $("#name").val();
+		data["username"] = $("#username").val();
+		data["email"] = $("#email").val();
+		data["mobile"] = $("#mobile").val();
+		data["password"] = $("#password").val();
+		
+		address["address"] = $("#address").val();
+		address["zipcode"] = $("#zipcode").val();
+		address["city"] = $("#city").val();
+		address["state"] = $("#state").val();
+		address["country"] = $("#country").val();
+		data["userAddress"]=address;
+		console.log(data);
+		$.ajax( {url:"/user/signup", 
+			    contentType: "application/json",
+			    data: JSON.stringify(data), 
+				type:"post",
+				dataType: 'json',
+				cache: false,
+		        timeout: 600000,
+		        success: function (data) {
+		           
+		           console.log(data.id);
+		           $.cookie("userId1",data.id);
+		           window.location.replace("/payment") 
+		        },
+				
+		});
+	}
+  </script>
+
+</head>
+<body>
+<section class="h-100 h-custom gradient-custom-2">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12">
+        <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+          <div class="card-body p-0">
+            <div class="row g-0">
+              <div class="col-lg-6">
+                <div class="p-5">
+                  <h3 class="fw-normal mb-5" style="color: #4835d4;">General Information</h3>
+
+
+               
+
+        <div class="form-outline mb-4">
+                  <input type="text"  class="form-control form-control-lg" placeholder="Name" id="name"/>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input type="text"  class="form-control form-control-lg"  placeholder="User Name" id="username"/>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input type="email"  class="form-control form-control-lg" placeholder="Email" id="email"/>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input type="text"  class="form-control form-control-lg" placeholder="Mobile Number" id="mobile"/>
+                </div>
+                
+                <div class="form-outline mb-4">
+                  <input type="password"  class="form-control form-control-lg" placeholder="Password" id="password"/>
+                </div>
+    
+
+                </div>
+              </div>
+              <div class="col-lg-6 bg-indigo text-white">
+                <div class="p-5">
+                  <h3 class="fw-normal mb-5">Address Details</h3>
+
+                    <div class="form-outline mb-4">
+                  <input type="text"  class="form-control form-control-lg" placeholder="Address" id="address"/>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input type="text"  class="form-control form-control-lg"  placeholder="Zip Code" id="zipcode"/>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input type="email"  class="form-control form-control-lg" placeholder="City" id="city"/>
+                </div>
+
+                <div class="form-outline mb-4">
+                  <input type="text"  class="form-control form-control-lg" placeholder="State" id="state"/>
+                </div>
+                
+                <div class="form-outline mb-4">
+                  <input type="password"  class="form-control form-control-lg" placeholder="Country" id="country"/>
+                </div>
+
+                <div class="d-flex justify-content-center">
+                  <button onclick="save();" type="button"
+                    class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" id="bt">Register</button>
+                    
+                </div>
+
+                <p class="text-center text-muted mt-3 mb-0">Have already an account? <a th:href="@{/userLogin}"
+                    class="fw-bold text-body"><u>Login here</u></a></p>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
