@@ -96,5 +96,11 @@ public class IndexController {
 	{
 		return "purchaseLogin";
 	}
+
+	@RequestMapping("/myCart")
+	public String myCart()
+	{
+		return "myCart";
+	}
 	
 }

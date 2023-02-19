@@ -139,7 +139,7 @@
 					            	   temp +='</div>';
 					            	   temp +='</div>';
 					            	   temp +='<div style="margin-left:30%;"class="buy_bt"><a href="#" onclick="getCookie('+data.id+')">Buy Now</a>';
-					            	   temp +='<a style="margin-left:20%;" href="#">Add to cart</a></div>';
+					            	   temp +='<a style="margin-left:20%;" href="#" onclick="getCookie('+data.id+')">Add to cart</a></div>';
 					            	   temp +='</div>';
 		                               temp +='</div>';
 		                               
@@ -160,6 +160,8 @@
 
   function getCookie(id)
   {
+	 var cart="cartClicked";
+	 $.cookie("cart",cart);
 	 window.location.replace("/purchaseUserDetailsAddress");
   }
  </script>

@@ -78,9 +78,37 @@ border-bottom-right-radius: 15px;
 		        timeout: 600000,
 		        success: function (data) {
 		           
+		           var cart=$.cookie("cart");
+		           console.log(cart);
+		           if(cart=="cartClicked")
+		        	   {
+		        	      var productId=$.cookie("productId");
+		        		  var userId=data.id;
+		        		  console.log(productId);
+		        		  console.log(userId);
+		        		 
+		        		  var cart = {}
+		        		  cart["productId"] = productId;
+		        		  cart["userId"] = userId;
+		        			
+		        			console.log(cart);
+		        			$.ajax( {url:"/cart/save", 
+		        			    contentType: "application/json",
+		        			    data: JSON.stringify(cart), 
+		        				type:"post",
+		        				dataType: 'json',
+		        				cache: false,
+		        		        timeout: 600000,
+		        		        success: function (data) 
+		        		        {
+		        	               window.location.replace("/myCart");
+		        		        },
+		        				
+		        		     });
+		        	   }
 		           console.log(data.id);
 		           $.cookie("userId",data.id);
-		           window.location.replace("/payment") 
+		           window.location.replace("/payment")  
 		        },
 				
 		});
