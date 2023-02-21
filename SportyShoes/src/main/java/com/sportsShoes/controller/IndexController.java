@@ -103,4 +103,11 @@ public class IndexController {
 		return "myCart";
 	}
 	
+	
+	@RequestMapping("/myProduct")
+	public String myProduct()
+	{
+		return "myProduct";
+	}
+	
 }

@@ -42,26 +42,40 @@
   <script>
   $(document).ready(function(){
 	  {
-		  var data={}
-		  data["username"]=$.cookie("username");
-		  data["password"]=$.cookie("password");
+		  var username=$.cookie("username");
+		  console.log(username);
 		 
 		  $.ajax( 
 					 { 
-						 url:"/user/authentication",
-						 contentType: "application/json",
-						    data: JSON.stringify(data), 
-							type:"post",
-							dataType: 'json',
-							cache: false,
-					        timeout: 600000,
+						 url:"/purchase/get/"+username,
 						 success:function(data) 
 						 { 
-							 console.log(data.name);
-							 console.log("I am in success function")
-							 $("#name12").html(data.name);
-							
-							
+							 console.log(data.length);
+					            var temp='<div class="row">';
+					            for(var i=0;i<data.length;i++)
+					            	{
+					            	 if(i%4==0&&i>1) 
+	                            	     temp +='</div>';
+	                            	     
+				            	   if(i%4==0&&i>1)
+				            	   temp +='<div class="row">';
+				            	   
+				            	   temp +='<div class="col-sm-3 col-sm-3">';
+				            	   temp +='<div class="tshirt_img"><img style="width:100px,height:100px;"src="images/'+data[i].imgname+'" />';
+				            	   temp +='<h4 class="shirt_text">'+data[i].name+'</h4>';
+				            	   temp +='<h6 class="shirt_text">'+data[i].brand+'</h6>';
+				            	   var price=data[i].price;
+				            	   var discount=data[i].discount;
+				            	   var discountPrice=(price/100)*discount;
+				            	   var actualPrice=price-discountPrice;
+				            	   temp +='<p class="price_text">Rs.<span id="price" style="color: #262626;">'+actualPrice.toFixed(0)+'     <strike>Rs.'+data[i].price+'</strike> ('+data[i].discount+'% OFF)</span></p></div>';			   
+	                               temp +='</div>';
+	                        
+					            	}
+					            temp +='</div>';
+					            
+					    $('#div').html(temp);
+										
 						  },
 						 
 						 
@@ -75,6 +89,7 @@
 
 </head>
 <body>
+  <span id="name12"></span>
   <!-- banner bg main start -->
       <div class="banner_bg_main">
          <!-- header top section start -->
@@ -86,8 +101,10 @@
                         <ul>
                            
                            <li><a href="#">Home</a></li>
-                           <li><a href="myProduct">My Purchased Product</a></li>
-                           <li><a href="myCart">My Cart Product</a></li>
+                           <li><a href="#">Admin Login</a></li>
+                           <li><a href="#">User Login</a></li>
+                           <li><a href="#">User SignUp</a></li>
+                           <li><a href="#">Customer Service</a></li>
                         </ul>
                      </div>
                   </div>
@@ -97,10 +114,7 @@
          <!-- header top section start -->
          <!-- logo section start -->
          
-           
-           
-            
-        
+          
           
           
          <!-- logo section end -->
@@ -114,38 +128,19 @@
       <!-- fashion section start -->
 
 
-    <div class="fashion_section">
-         
-           
-
-                  <div class="container">
-                     <h1 class="fashion_taital" >Welcome <span id="name12"></span> !</h1>
-                     <div class="fashion_section_2">
-                        <div class="row">
-                           <div class="col-lg-6 ">
-                              <div class="box_main">
-                                 <h4 class="shirt_text">All Purchased Product</h4>
-                                 <div class="tshirt_img"><a href="myProduct"><img src="images/buy.png"></a></div>
-                              </div>
-                           </div>
-                           <div class="col-lg-6 ">
-                              <div class="box_main">
-                                 <h4 class="shirt_text">All cart Product</h4>
-                                 <div class="tshirt_img"><a href="myCart" ><img src="images/cart.png"></a></div>
-                              </div>
-                           </div>
-                         
-                        </div>
-                     </div>
-                  </div>
-               
-            
-         
-      </div>
+  
       <!-- fashion section end -->
          
     
-    
+    <div class="fashion_section">
+         <div id="main_slider" class="carousel slide" data-ride="carousel">
+                <div class="container">
+                     <h1 class="fashion_taital">Purchased Product</h1>
+                     <div id="div" class="fashion_section_2">             
+                     </div>
+            </div>
+         </div>
+      </div>
 
       <!-- fashion section end -->
       
