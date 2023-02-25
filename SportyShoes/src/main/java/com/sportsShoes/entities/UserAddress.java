@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class UserAddress {
@@ -12,16 +13,25 @@ public class UserAddress {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
 	
+	@NotBlank(message="address shouldn't be blank or null")
 	private String address;
-	private int zipCode;
+	
+	@NotBlank(message="zipcode shouldn't be blank or null")
+	private String zipCode;
+	
+	@NotBlank(message="city shouldn't be blank or null")
 	private String city;
+	
+	@NotBlank(message="state shouldn't be blank or null")
 	private String state;
+	
+	@NotBlank(message="country shouldn't be blank or null")
 	private String country;
 	public UserAddress() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public UserAddress(int id, String address, int zipCode, String city, String state, String country) {
+	public UserAddress(int id, String address, String zipCode, String city, String state, String country) {
 		super();
 		this.id = id;
 		this.address = address;
@@ -42,10 +52,10 @@ public class UserAddress {
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	public int getZipCode() {
+	public String getZipCode() {
 		return zipCode;
 	}
-	public void setZipCode(int zipCode) {
+	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
 	}
 	public String getCity() {

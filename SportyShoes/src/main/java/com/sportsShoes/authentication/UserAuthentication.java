@@ -9,7 +9,6 @@ public class UserAuthentication {
 	private String password;
 	public UserAuthentication() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public UserAuthentication(String username, String password) {
 		super();

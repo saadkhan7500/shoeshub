@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name="products")
@@ -13,22 +14,34 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
+	
+	@NotBlank(message="name shouldn't be blank")
 	private String name;
+	
+	@NotBlank(message="brand shouldn't be blank")
 	private String brand;
+	
+	@NotBlank(message="category shouldn't be blank")
 	private String category;
+	
+	@NotBlank(message="price shouldn't be blank")
 	private String price;
-	private int quantity;
-	private int size;
+	
+	@NotBlank(message="quantity shouldn't be blank")
+	private String quantity;
+	
+	@NotBlank(message="size shouldn't be blank")
+	private String size;
+	
 	private int discount;
 	private String status;
 	private String imgname;
 	
 	public Product() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public Product(int id, String name, String brand, String category, String price, int quantity, int size,
+	public Product(int id, String name, String brand, String category, String price, String quantity, String size,
 			int discount, String status, String imgname) {
 		super();
 		this.id = id;
@@ -83,19 +96,19 @@ public class Product {
 		this.price = price;
 	}
 
-	public int getQuantity() {
+	public String getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(String quantity) {
 		this.quantity = quantity;
 	}
 
-	public int getSize() {
+	public String getSize() {
 		return size;
 	}
 
-	public void setSize(int size) {
+	public void setSize(String size) {
 		this.size = size;
 	}
 

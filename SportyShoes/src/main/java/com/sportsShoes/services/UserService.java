@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sportsShoes.Excpetion.UserException;
 import com.sportsShoes.authentication.UserAuthentication;
 import com.sportsShoes.entities.User;
 import com.sportsShoes.repositories.UserRepo;
@@ -16,14 +17,22 @@ public class UserService {
 	private UserRepo userRepo;
 	
 	
-	public List<User> getAllUsers()
+	public List<User> getAllUsers() throws UserException
 	{
-		return (List<User>) userRepo.findAll();
+		List<User> users=(List<User>) userRepo.findAll();
+		if(users.size()!=0)
+			return users;
+		else
+			throw new UserException("no records found for user");
 	}
 	
-	public User getUser(int id)
+	public User getUser(int id) throws UserException
 	{
-		return userRepo.findById(id);
+		User user =userRepo.findById(id);
+		if(user!=null)
+		     return user;
+		else
+			throw new UserException("user not found with this id "+id);
 	}
 	
 	public User createUser(User user)
@@ -31,15 +40,22 @@ public class UserService {
 		return userRepo.save(user);
 	}
 	
-	public User userAuthentication(UserAuthentication authentication)
+	public User userAuthentication(UserAuthentication authentication) throws UserException
 	{
-		User u= userRepo.findByUsername(authentication.getUsername());
-		if(u.getUsername().equals(authentication.getUsername())&& u.getPassword().equals(authentication.getPassword()))
+		User u= userRepo.findByUsernameAndPassword(authentication.getUsername(),authentication.getPassword());
+		if(u!=null)
+		{
+		  if(u.getUsername().equals(authentication.getUsername())&& u.getPassword().equals(authentication.getPassword()))
 				{
 			         return u;
 				}
-		
-		return null;
+	    }
+		else
+		{
+			throw new UserException("user not found with this cred");
+		}
+		return u;
+	
 	}
 	
 //	public User updateUser(User user , int id)
@@ -54,9 +70,13 @@ public class UserService {
 //		return userRepo.save(u);
 //	}
 //	
-	public void delete(int id)
+	public void delete(int id) throws UserException
 	{
+		User user=userRepo.findById(id);
+		if(user!=null)
 		userRepo.deleteById(id);
+		else
+			throw new UserException("can't delete user with this id ="+id);
 	}
 //	
 //	

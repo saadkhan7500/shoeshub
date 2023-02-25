@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sportsShoes.Excpetion.UserException;
 import com.sportsShoes.authentication.UserAuthentication;
 import com.sportsShoes.entities.User;
 import com.sportsShoes.repositories.UserRepo;
 import com.sportsShoes.services.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class UserController {
@@ -28,17 +31,17 @@ public class UserController {
 	private UserRepo userRepo;
 	
 	@GetMapping("/user/getusers")
-	public List<User> getAllUsers() {
+	public List<User> getAllUsers() throws UserException {
 		return userService.getAllUsers();
 	}
 
 	@GetMapping("/user/getuser/{id}")
-	public User getUser(@PathVariable("id") int id) {
-		return userService.getUser(id);
+	public ResponseEntity<?> getUser(@PathVariable("id") int id) throws UserException {
+		return new ResponseEntity<>(userService.getUser(id),HttpStatus.OK);
 	}
 
 	@PostMapping("/user/signup")
-	public ResponseEntity<?> createUser(@RequestBody User user) {
+	public ResponseEntity<?> createUser(@RequestBody @Valid User user) {
 		
 		if(userRepo.existsByUsername(user.getUsername()))
 		{
@@ -48,19 +51,16 @@ public class UserController {
 		{
 			return new ResponseEntity<>("email is already taken",HttpStatus.BAD_REQUEST);
 		}
-		
-		userService.createUser(user);
-		return new ResponseEntity<>(user, HttpStatus.OK);
+
+		return new ResponseEntity<>(userService.createUser(user), HttpStatus.CREATED);
 	}
 
 	@PostMapping("user/authentication")
-	public User userAuthentication(@RequestBody UserAuthentication authentication)
+	public ResponseEntity<?> userAuthentication(@RequestBody UserAuthentication authentication) throws UserException
 	{
 		User u=userService.userAuthentication(authentication);
-		if(u!=null)
-		return u;
-		else
-			return null;
+		return new ResponseEntity<>(u,HttpStatus.OK);
+		
 	}
 //	@PutMapping("/users/{id}")
 //	public User updateUser(@RequestBody User user, @PathVariable("id") int id) {
@@ -68,7 +68,7 @@ public class UserController {
 //	}
 
 	@DeleteMapping("/user/deleteuser/{id}")
-	public void deleteUser(@PathVariable("id") int id) {
+	public void deleteUser(@PathVariable("id") int id) throws UserException {
 		userService.delete(id);
 	}
 

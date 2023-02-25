@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.sportsShoes.Excpetion.ProductException;
 import com.sportsShoes.entities.Product;
 import com.sportsShoes.repositories.ProductRepo;
 
@@ -14,49 +15,69 @@ public class ProductService {
 	
 	@Autowired
 	private ProductRepo productRepo;
+
 	
-	
-	
-	public Product addProduct(Product product) { 
-		
+	public Product addProduct(Product product) 
+	{ 
+		product.setStatus("added");
 		return productRepo.save(product); 
 		
      }
 	
-	public List<Product> getAllProducts() {
+	public List<Product> getAllProducts() throws ProductException {
 		
-		return (List<Product>)productRepo.findAll(); 
+		 List<Product> products=(List<Product>) productRepo.findAll();
+		 if(products!=null)
+		 return products;
+		 else
+			 throw new ProductException("no record found for products");
 	
 	}
 	
-	public Product getProduct(int id)
+	public Product getProduct(int id) throws ProductException
 	{ 
-		return productRepo.findById(id); 
+		Product product=productRepo.findById(id);
+		if(product!=null)
+		return product;
+		else
+			throw new ProductException("product does not exist with this id = "+id);
 	}
 	
-	public Product updateProduct(Product product , int id)
+	public Product updateProduct(Product product , int id) throws ProductException
 	{
 		Product p=productRepo.findById(id);
-		p.setName(product.getName());
-		p.setBrand(product.getBrand());
-		p.setCategory(product.getCategory());
-		p.setDiscount(product.getDiscount());
-		p.setPrice(product.getPrice());
-		p.setQuantity(product.getQuantity());
-		p.setSize(product.getSize());
-		p.setStatus(product.getStatus());
-		
-		return productRepo.save(p);
+		if(p!=null)
+		{
+			p.setName(product.getName());
+			p.setBrand(product.getBrand());
+			p.setCategory(product.getCategory());
+			p.setDiscount(product.getDiscount());
+			p.setPrice(product.getPrice());
+			p.setQuantity(product.getQuantity());
+			p.setSize(product.getSize());
+			p.setStatus(product.getStatus());
+		    return productRepo.save(p);
+		}
+		else
+			throw new ProductException("product does not exist with this id = "+id);
 	}
 	
-	public List<Product> findProdcutsByCategory(String category)
+	public List<Product> findProdcutsByCategory(String category) throws ProductException
 	{
-		return productRepo.findProdcutsByCategory(category);
+		List<Product> products=productRepo.findProdcutsByCategory(category);
+		if(products.size()!=0)
+		return products;
+		else
+			throw new ProductException("product does not exist");
 	}
 	
-	public List<Product> findProductsByBrandOrCatgegory(String search)
+	public List<Product> findProductsByBrandOrCatgegory(String search) throws ProductException
 	{
-		return productRepo.findProductsByBrandOrCatgegory(search);
+		List<Product> products=productRepo.findProductsByBrandOrCatgegory(search);
+		if(products.size()!=0)
+			return products;
+			else
+				throw new ProductException("product does not exist");
 	}
 	/*
 	 * public List<Product> getAllProducts() { return (List<Product>)

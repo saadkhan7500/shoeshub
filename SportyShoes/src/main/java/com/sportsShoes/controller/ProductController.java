@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,10 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sportsShoes.Excpetion.ProductException;
 import com.sportsShoes.entities.Product;
 import com.sportsShoes.entities.User;
 import com.sportsShoes.repositories.ProductRepo;
 import com.sportsShoes.services.ProductService;
+
+import jakarta.validation.Valid;
 
 @RestController
 public class ProductController {
@@ -36,34 +40,33 @@ public class ProductController {
 
 	
 	@PostMapping("/product/addproduct")
-	public Product addProduct(@RequestBody Product product)
+	public ResponseEntity<?> addProduct(@RequestBody @Valid Product product)
 	{
-		product.setStatus("added");
-		product.setImgname(" ");
-		return productService.addProduct(product);
+		return new ResponseEntity<>(productService.addProduct(product),HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/product/getproducts")
-	public List<Product> getAllProducts()
+	public ResponseEntity<List<Product>> getAllProducts() throws ProductException
 	{
-		return productService.getAllProducts();
+		return new ResponseEntity<>(productService.getAllProducts(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/product/getproduct/{id}")
-	public Product getProduct(@PathVariable("id") int id)
+	public Product getProduct(@PathVariable("id") int id) throws ProductException
 	{
 		return productService.getProduct(id);
 	}
 	
-	@PutMapping("/product/updateproduct/{id}") public Product updateProduct(@RequestBody Product product , @PathVariable("id") int id)
+	@PutMapping("/product/updateproduct/{id}") 
+	public ResponseEntity<?>  updateProduct(@RequestBody Product product , @PathVariable("id") int id) throws ProductException
 	{ 
-		return productService.updateProduct(product, id); 
+		return new ResponseEntity<>( productService.updateProduct(product, id),HttpStatus.OK); 
 	}
 	
 	@Value("${file.upload-dir}")
 	String File_DIRECTOY;
 	@PostMapping("/product/uploadimage")
-	public ResponseEntity<Object> upload(@RequestParam("file") MultipartFile file,@RequestParam("pId")int id)throws IOException
+	public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file,@RequestParam("pId")int id)throws IOException
 	{
 		System.out.println("Id = "+id);
 		String absolutePath=File_DIRECTOY+file.getOriginalFilename();
@@ -80,15 +83,15 @@ public class ProductController {
 	}
 	
 	@GetMapping("/products/getcategory/{category}")
-	public List<Product> findProdcutsByCategory(@PathVariable("category") String category)
+	public ResponseEntity<List<Product>> findProdcutsByCategory(@PathVariable("category") String category) throws ProductException
 	{
-		return productService.findProdcutsByCategory(category);
+		return new ResponseEntity<>(productService.findProdcutsByCategory(category),HttpStatus.OK);
 	}
 	 
 	@GetMapping("/products/getbrandorcatgeory/{search}")
-	public List<Product> findProductsByBrandOrCatgegory(@PathVariable("search")String search)
+	public ResponseEntity<List<Product>> findProductsByBrandOrCatgegory(@PathVariable("search")String search) throws ProductException
 	{
-		return productService.findProductsByBrandOrCatgegory(search);
+		return new ResponseEntity<>(productService.findProductsByBrandOrCatgegory(search),HttpStatus.OK);
 	}
 	/*
 	 * @GetMapping("/products") public List<Product> getAllProducts() { return
