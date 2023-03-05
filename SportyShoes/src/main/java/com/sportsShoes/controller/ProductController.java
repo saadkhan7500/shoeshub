@@ -79,7 +79,7 @@ public class ProductController {
 		p.setImgname(file.getOriginalFilename());
 		productRepo.save(p);
 		System.out.println(p);
-		return new ResponseEntity<Object>("file uploaded",HttpStatus.OK);
+		return new ResponseEntity<Object>(HttpStatus.OK);
 	}
 	
 	@GetMapping("/products/getcategory/{category}")

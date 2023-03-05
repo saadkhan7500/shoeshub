@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sportsShoes.Excpetion.PurchaseException;
 import com.sportsShoes.entities.Product;
 import com.sportsShoes.entities.Purchase;
 import com.sportsShoes.services.PurchaseService;
@@ -21,7 +22,7 @@ public class PurchaseController {
 		
 	
 	@PostMapping("/purchase/save")
-	public Purchase save(@RequestBody Purchase purchase)
+	public Purchase save(@RequestBody Purchase purchase) throws PurchaseException
 	{
 		return purchaseService.savePurchaseProduct(purchase);
 	}

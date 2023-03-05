@@ -14,10 +14,14 @@ public interface ProductRepo extends CrudRepository<Product, Integer> {
 	
   public Product findById(int id);
   
-  @Query(value="select * from Products p where p.category = :category",nativeQuery=true)
+  @Query(value="select * from Products p where p.category = :category and p.status='added' ",nativeQuery=true)
   List<Product> findProdcutsByCategory(@Param("category")String category);
   
-  @Query(value="select * from Products p where p.brand = :search or p.category = :search" , nativeQuery=true)
+  @Query(value="select * from Products p where p.brand = :search or p.category = :search and p.status='added' " , nativeQuery=true)
   List<Product> findProductsByBrandOrCatgegory(@Param("search")String search);
+  
+  
+  @Query(value="select * from Products p where p.status='added'", nativeQuery = true)
+  List<Product> findAll();
 
 }

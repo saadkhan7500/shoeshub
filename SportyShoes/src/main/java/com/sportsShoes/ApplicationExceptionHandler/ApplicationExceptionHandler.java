@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.sportsShoes.Excpetion.ProductException;
+import com.sportsShoes.Excpetion.PurchaseException;
 import com.sportsShoes.Excpetion.UserException;
 
 import java.util.HashMap;
@@ -39,6 +40,15 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ProductException.class)
     public Map<String,String> handleProductException(ProductException ex)
+    {
+    	Map<String , String> errorMap=new HashMap<>();
+    	errorMap.put("errorMessage", ex.getMessage());
+    	return errorMap;
+    }
+    
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(PurchaseException.class)
+    public Map<String,String> handlePurchaseException(PurchaseException ex)
     {
     	Map<String , String> errorMap=new HashMap<>();
     	errorMap.put("errorMessage", ex.getMessage());

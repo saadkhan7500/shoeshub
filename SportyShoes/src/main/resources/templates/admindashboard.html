@@ -46,27 +46,29 @@
 					 success:function(data) 
 					 { 
 						 console.log(data.length);
-					            var temp='<div class="row">';
-					            for(var i=0;i<data.length;i++)
-					            	{
-					            	  if(i%3==0&&i>1) 
-		                            	     temp +='</div>';
-					            	   if(i%3==0&&i>1)
-					            	   temp +='<div class="row">';
-					            	   
-					            	   temp +='<div class="col-sm-4 col-sm-4">';
-					            	   temp +='<div class="box_main">';
-					            	   temp +='<h4 class="shirt_text">'+data[i].name+'</h4>';
-					            	   temp +='<p class="price_text">Price  Rs.<span id="price" style="color: #262626;">'+data[i].price+'</span></p>';
-									   temp +='<div class="tshirt_img"><img src="images/tshirt-img.png"></div>';
-									   temp +='<div class="btn_main">';
-									   temp +='<div class="buy_bt"><a href="#">Buy Now</a></div>';
-		                               temp +='<div class="seemore_bt"><a href="#">See More</a></div></div>';
-		                               temp +='</div>';
-		                               temp +='</div>';  
-		                            
-					            	}
-					            temp +='</div>';
+						 var temp='<div class="row">';
+				            for(var i=0;i<data.length;i++)
+				            	{
+				            	  if(i%4==0&&i>1) 
+	                            	     temp +='</div>';
+	                            	     
+				            	   if(i%4==0&&i>1)
+				            	   temp +='<div class="row">';
+				            	   
+				            	   temp +='<div class="col-sm-3 col-sm-3">';
+				            	   temp +='<div class="tshirt_img"><img style="width:100px,height:100px;"src="images/'+data[i].imgname+'" />';
+				            	   temp +='<h4 class="shirt_text">'+data[i].name+'</h4>';
+				            	   temp +='<h6 class="shirt_text">'+data[i].brand+'</h6>';
+				            	   var price=data[i].price;
+				            	   var discount=data[i].discount;
+				            	   var discountPrice=(price/100)*discount;
+				            	   var actualPrice=price-discountPrice;
+				            	   temp +='<p class="price_text">Rs.<span id="price" style="color: #262626;">'+actualPrice.toFixed(0)+'     <strike>Rs.'+data[i].price+'</strike> ('+data[i].discount+'% OFF)</span></p></div>';			   
+	                               temp +='</div>';
+	                               
+	                            
+				            	}
+				            temp +='</div>';
 					            
 					    $('#div').html(temp);
 					  },
@@ -95,27 +97,28 @@ function getCategory(category)
 					 success:function(data) 
 					 { 
 						 console.log(data.length);
-					            var temp='<div class="row">';
-					            for(var i=0;i<data.length;i++)
-					            	{
-					            	  if(i%3==0&&i>1) 
-		                            	     temp +='</div>';
-					            	   if(i%3==0&&i>1)
-					            	   temp +='<div class="row">';
-					            	   
-					            	   temp +='<div class="col-sm-4 col-sm-4">';
-					            	   temp +='<div class="box_main">';
-					            	   temp +='<h4 class="shirt_text">'+data[i].name+'</h4>';
-					            	   temp +='<p class="price_text">Price  Rs.<span id="price" style="color: #262626;">'+data[i].price+'</span></p>';
-									   temp +='<div class="tshirt_img"><img src="images/tshirt-img.png"></div>';
-									   temp +='<div class="btn_main">';
-									   temp +='<div class="buy_bt"><a href="#">Buy Now</a></div>';
-		                               temp +='<div class="seemore_bt"><a href="#">See More</a></div></div>';
-		                               temp +='</div>';
-		                               temp +='</div>';  
-		                            
-					            	}
-					            temp +='</div>';
+						 var temp='<div class="row">';
+				            for(var i=0;i<data.length;i++)
+				            	{
+				            	 if(i%4==0&&i>1) 
+                         	     temp +='</div>';
+                         	     
+			            	   if(i%4==0&&i>1)
+			            	   temp +='<div class="row">';
+			            	   
+			            	   temp +='<div class="col-sm-3 col-sm-3">';
+			            	   temp +='<div class="tshirt_img"><a href="#" ><img style="width:100px,height:100px;"src="images/'+data[i].imgname+'" /></a>';
+			            	   temp +='<h4 class="shirt_text">'+data[i].name+'</h4>';
+			            	   temp +='<h6 class="shirt_text">'+data[i].brand+'</h6>';
+			            	   var price=data[i].price;
+			            	   var discount=data[i].discount;
+			            	   var discountPrice=(price/100)*discount;
+			            	   var actualPrice=price-discountPrice;
+			            	   temp +='<p class="price_text">Rs.<span id="price" style="color: #262626;">'+actualPrice.toFixed(0)+'     <strike>Rs.'+data[i].price+'</strike> ('+data[i].discount+'% OFF)</span></p></div>';			   
+                            temp +='</div>';
+                     
+				            	}
+				            temp +='</div>';
 					            
 					    $('#div').html(temp);
 					  },
@@ -133,27 +136,28 @@ function getCategoryOrBrand()
 				 success:function(data) 
 				 { 
 					 console.log(data.length);
-				            var temp='<div class="row">';
-				            for(var i=0;i<data.length;i++)
-				            	{
-				            	  if(i%3==0&&i>1) 
-	                            	     temp +='</div>';
-				            	   if(i%3==0&&i>1)
-				            	   temp +='<div class="row">';
-				            	   
-				            	   temp +='<div class="col-sm-4 col-sm-4">';
-				            	   temp +='<div class="box_main">';
-				            	   temp +='<h4 class="shirt_text">'+data[i].name+'</h4>';
-				            	   temp +='<p class="price_text">Price  Rs.<span id="price" style="color: #262626;">'+data[i].price+'</span></p>';
-								   temp +='<div class="tshirt_img"><img src="images/tshirt-img.png"></div>';
-								   temp +='<div class="btn_main">';
-								   temp +='<div class="buy_bt"><a href="#">Buy Now</a></div>';
-	                               temp +='<div class="seemore_bt"><a href="#">See More</a></div></div>';
-	                               temp +='</div>';
-	                               temp +='</div>';  
-	                            
-				            	}
-				            temp +='</div>';
+					 var temp='<div class="row">';
+			            for(var i=0;i<data.length;i++)
+			            	{
+			            	 if(i%4==0&&i>1) 
+                     	     temp +='</div>';
+                     	     
+		            	   if(i%4==0&&i>1)
+		            	   temp +='<div class="row">';
+		            	   
+		            	   temp +='<div class="col-sm-3 col-sm-3">';
+		            	   temp +='<div class="tshirt_img"><a href="#" ><img style="width:100px,height:100px;"src="images/'+data[i].imgname+'" /></a>';
+		            	   temp +='<h4 class="shirt_text">'+data[i].name+'</h4>';
+		            	   temp +='<h6 class="shirt_text">'+data[i].brand+'</h6>';
+		            	   var price=data[i].price;
+		            	   var discount=data[i].discount;
+		            	   var discountPrice=(price/100)*discount;
+		            	   var actualPrice=price-discountPrice;
+		            	   temp +='<p class="price_text">Rs.<span id="price" style="color: #262626;">'+actualPrice.toFixed(0)+'     <strike>Rs.'+data[i].price+'</strike> ('+data[i].discount+'% OFF)</span></p></div>';			   
+                        temp +='</div>';
+                 
+			            	}
+			            temp +='</div>';
 				            
 				    $('#div').html(temp);
 				  },

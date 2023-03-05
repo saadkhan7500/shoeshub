@@ -26,7 +26,7 @@ public class ProductService {
 	
 	public List<Product> getAllProducts() throws ProductException {
 		
-		 List<Product> products=(List<Product>) productRepo.findAll();
+		 List<Product> products=productRepo.findAll();
 		 if(products!=null)
 		 return products;
 		 else

@@ -3,8 +3,11 @@ package com.sportsShoes.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.sportsShoes.Excpetion.PurchaseException;
 import com.sportsShoes.entities.Product;
 import com.sportsShoes.entities.Purchase;
 import com.sportsShoes.entities.User;
@@ -24,9 +27,38 @@ public class PurchaseService {
 	@Autowired
 	private ProductRepo productRepo;
 	
-	public Purchase savePurchaseProduct(Purchase purchase)
+	
+	public Purchase savePurchaseProduct(Purchase purchase) throws PurchaseException
 	{
-		return purchaseRepo.save(purchase);
+		
+		Product product=productRepo.findById(purchase.getProductId());
+		System.out.println(product);
+		int  quantity=Integer.parseInt(product.getQuantity());
+		if(quantity>1)
+		{
+			quantity=quantity-1;
+			String q=Integer.toString(quantity);
+			product.setQuantity(q);
+			productRepo.save(product);
+			System.out.println("inside if");
+			return purchaseRepo.save(purchase);
+		}
+		else if(quantity==1)
+		{
+			quantity=quantity-1;
+			String q=Integer.toString(quantity);
+			product.setQuantity(q);
+			productRepo.save(product);
+			product.setStatus("soled");
+			productRepo.save(product);
+			return purchaseRepo.save(purchase);
+			
+			
+		}
+		else
+		throw new PurchaseException("this product has been soled out");
+
+		
 	}
 
 
