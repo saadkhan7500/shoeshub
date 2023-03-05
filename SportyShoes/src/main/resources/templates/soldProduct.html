@@ -42,7 +42,7 @@
 		  {
 		     $.ajax( 
 					 { 
-						 url:"/product/getproducts",
+						 url:"/purchase/get",
 						 success:function(data) 
 						 { 
 							 
@@ -59,10 +59,8 @@
 									    emp+='<td>'+data[i].size+'</td>';
 									    emp+='<td>'+data[i].quantity+'</td>';
 									    emp+='<td><a href="#" data-toggle="modal" data-target="#uploadModal" onclick="getProductId('+data[i].id+')" "><img style="width:30%;height:30%"src="images/'+data[i].imgname+'" /> </a></td>';
-									    emp+='<td>'+data[i].status+'</td>';
-									    emp+='<td> <button style="color:black;" type="button" class="btn btn-warning" data-toggle="modal" data-target="#updateModal"  onclick="getProductInfo('+data[i].id+');">Edit</button></td>';
-									    emp+='<td> <button style="color:black;" type="button" class="btn btn-danger"   onclick="deleteUser('+data[i].id+');">delete</button></td>';
-
+									    emp+='<td>sold</td>';
+									   
 									 	emp+='</tr>';
 					            	}
 					
@@ -99,31 +97,7 @@
 
 		}); 
 	}
-	 
-	 function updateProductInfo() {
-		 var data = {}
-			data["name"] = $("#name").val();
-			data["brand"] = $("#brand").val();
-			data["category"] = $("#category").val();
-			data["price"] = $("#price").val();
-			data["discount"] = $("#discount").val();
-			data["size"] = $("#size").val();
-			data["quantity"] = $("#quantity").val();
-			data["status"] = $("#status").val();
-			var id=$("#id").val();
-			$.ajax( {
-				    url:"product/updateproduct/"+id, 
-				    contentType: "application/json",
-				    data: JSON.stringify(data), 
-					type:"PUT",
-					dataType: 'json',
-					success:function(resp, status){
-						console.log(resp+" "+ status);	
-						alert("updated");
-					},
-				
-			});
-}	  
+	 		
 	
 	
 	 /* async function uploadFile(id) 

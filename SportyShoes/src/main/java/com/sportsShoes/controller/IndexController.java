@@ -110,4 +110,14 @@ public class IndexController {
 		return "myProduct";
 	}
 	
+	@RequestMapping("/soldProduct")
+	public String soldProduct()
+	{
+		return "soldProduct";
+	}
+	@RequestMapping("/ResetPassowrd")
+	public String ResetPassowrd()
+	{
+		return "ResetPassowrd";
+	}
 }

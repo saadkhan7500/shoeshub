@@ -32,4 +32,10 @@ public class PurchaseController {
 	{
 		return purchaseService.purchaseProductByUser(username);
 	}
+	
+	@GetMapping("/purchase/get")
+	public List<Product> purchasedProduct()
+	{
+		return purchaseService.purchasedProduct();
+	}
 }

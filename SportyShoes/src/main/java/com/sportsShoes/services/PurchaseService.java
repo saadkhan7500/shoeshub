@@ -65,10 +65,8 @@ public class PurchaseService {
 
 	public List<Product> purchaseProductByUser(String username) {
 		// TODO Auto-generated method stub
-		System.out.println("inside");
-		System.out.println(username);
+
 		User user=userRepo.findByUsername(username);
-		System.err.println(user.getId());
 		List<Purchase> purchaseList=null;
 		if(user!=null)
 		{
@@ -79,6 +77,20 @@ public class PurchaseService {
 			  if(products!=null)
 				  return products;
 			}
+		}
+		return null;
+	}
+
+
+
+	public List<Product> purchasedProduct() {
+		
+		List<Purchase> purchaseList=purchaseRepo.findAll();
+		if(purchaseList!=null)
+		{
+			List<Product> productList=purchaseList.stream().map(e -> productRepo.findById(e.getProductId())).toList();
+			if(productList!=null)
+				return productList;
 		}
 		return null;
 	}

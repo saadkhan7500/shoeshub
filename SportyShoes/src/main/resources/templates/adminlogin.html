@@ -29,23 +29,40 @@ background: linear-gradient(to right, rgba(132, 250, 176, 1), rgba(143, 211, 244
 }
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
   <script>
   function save() {
-		var username= $("#username").val();
-		var password= $("#password").val();
-		var id=1;
-		console.log(username);
-		console.log(password);
-		if(username=="admin7500" && password=="saadkhan")
-			{
-			   window.location.replace("/admindashboard");
-			}
-		else
-			{
-			   var data="please enter valid username and password";
-			   $('#msg').html(data);
-			}
-	
+	  
+	  var data = {}
+		data['username']= $("#username").val();
+		data['password']= $("#password").val();
+		console.log(data);
+		$.ajax( 
+				{
+					url:"/admin/check", 
+				    contentType: "application/json",
+				    data: JSON.stringify(data), 
+					type:"post",
+					dataType: 'json',
+					cache: false,
+			        timeout: 600000,
+			        success: function (data) {
+			        	   $.cookie("username",data.username); 
+			        	   $.cookie("password",data.password); 
+			        	window.location.replace("/admindashboard");
+	  
+			
+			        },
+			        error:function(data)
+			        {
+			        	var data="please enter valid username and password";
+						   $('#msg').html(data);
+			        }
+		        
+				
+		});
+			
 	}
   </script>
 
@@ -59,7 +76,6 @@ background: linear-gradient(to right, rgba(132, 250, 176, 1), rgba(143, 211, 244
         <div class="col-12 col-md-9 col-lg-7 col-xl-6">
           <div class="card" style="border-radius: 15px;">
             <div class="card-body p-5">
-             <span style="color: green;"id="msg"></span>
               <h3 class="text-uppercase text-center mb-3">Admin Login</h3>
 
               <form>
@@ -71,7 +87,7 @@ background: linear-gradient(to right, rgba(132, 250, 176, 1), rgba(143, 211, 244
                 <div class="form-outline mb-4">
                   <input type="password"  class="form-control form-control-lg"  placeholder="Password" id="password"/>
                 </div>
-                
+                <span style="color: red;"id="msg"></span>
                 <div class="d-flex justify-content-center">
                   <button onclick="save();" type="button"
                     class="btn btn-success btn-block btn-lg gradient-custom-4 text-body" id="bt">Login</button>
