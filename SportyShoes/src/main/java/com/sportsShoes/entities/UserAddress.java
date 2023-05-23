@@ -27,6 +27,7 @@ public class UserAddress {
 	
 	@NotBlank(message="country shouldn't be blank or null")
 	private String country;
+	
 	public UserAddress() {
 		super();
 		// TODO Auto-generated constructor stub

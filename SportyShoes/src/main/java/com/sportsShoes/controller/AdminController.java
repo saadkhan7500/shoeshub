@@ -1,6 +1,8 @@
 package com.sportsShoes.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,10 +17,10 @@ public class AdminController {
 	private AdminService adminService;
 	
 	@PostMapping("/admin/check")
-	public Admin getAdmin(@RequestBody Admin admin)
+	public ResponseEntity<?> getAdmin(@RequestBody Admin admin)
 	{
 		System.out.println(admin.getUsername()+"   "+admin.getPassword());
-		return adminService.getAdmin(admin);
+		return new ResponseEntity<>(adminService.getAdmin(admin),HttpStatus.OK);
 	}
 	
 	@PostMapping(value="/admin/resetpassword")
